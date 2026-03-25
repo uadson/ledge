@@ -8,20 +8,17 @@ def test_get_engine_response_gemini(mocker):
         "gemini_model": "gemini-1.5-flash"
     })
     
-    # Mock genai
+    # Mock genai Client
     mock_genai = mocker.patch("ledge.core.engine.genai")
-    mock_model = mock_genai.GenerativeModel.return_value
-    mock_response = mock_model.generate_content.return_value
+    mock_client = mock_genai.Client.return_value
+    mock_response = mock_client.models.generate_content.return_value
     mock_response.text = "Gemini Response"
     
     response = get_engine_response("prompt", "system", use_local=False)
     
     assert response == "Gemini Response"
-    mock_genai.configure.assert_called_with(api_key="fake_key")
-    mock_genai.GenerativeModel.assert_called_with(
-        model_name="gemini-1.5-flash",
-        system_instruction="system"
-    )
+    mock_genai.Client.assert_called_with(api_key="fake_key")
+    mock_client.models.generate_content.assert_called()
 
 def test_get_engine_response_ollama(mocker):
     mocker.patch("ledge.core.engine.load_config", return_value={

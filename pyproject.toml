@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Global AI Development Assistant with Blueprint architecture"
 dependencies = [
     "typer[all]",
-    "google-generativeai",
+    "google-genai",
     "ollama",
     "python-dotenv",
     "pytest",

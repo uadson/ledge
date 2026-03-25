@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import ollama
 from typing import Optional
 from ledge.config import load_config
@@ -14,20 +15,19 @@ def get_engine_response(
     config = load_config()
     
     if not use_local:
-        # Gemini Engine
+        # Gemini Engine (New SDK)
         modelo_nome = "gemini-1.5-pro" if use_pro else config.get("gemini_model", "gemini-1.5-flash")
         api_key = config.get("gemini_api_key") or os.getenv("GEMINI_API_KEY")
         
         if not api_key:
             raise ValueError("GEMINI_API_KEY não configurada. Use 'ledge init' ou defina no .env.")
             
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(
-            model_name=modelo_nome,
-            system_instruction=system_instruction
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model=modelo_nome,
+            contents=prompt,
+            config=types.GenerateContentConfig(system_instruction=system_instruction)
         )
-        
-        response = model.generate_content(prompt)
         return response.text
     else:
         # Ollama Engine
