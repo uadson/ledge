@@ -1,0 +1,20 @@
+[project]
+name = "ledge"
+version = "0.1.0"
+description = "Global AI Development Assistant with Blueprint architecture"
+dependencies = [
+    "typer[all]",
+    "google-generativeai",
+    "ollama",
+    "python-dotenv",
+    "pytest",
+    "pytest-mock",
+]
+requires-python = ">=3.12"
+
+[project.scripts]
+ledge = "ledge.main:app"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    volumes:
+      - ..:/app
+      - ~/.ledge:/root/.ledge
+    env_file: ../.env
+    depends_on:
+      - ollama
+    stdin_open: true
+    tty: true
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  ollama_data:
